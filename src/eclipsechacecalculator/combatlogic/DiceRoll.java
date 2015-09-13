@@ -75,6 +75,16 @@ public class DiceRoll
 			hits.set(j, temp);
 		}
 	}
+        
+        public static ArrayList<DiceRoll> getRolls(ArrayList<Volley> vollies)
+        {
+            ArrayList rolls = new ArrayList<>();
+            for (Volley v : vollies)
+            {
+                rolls.addAll(getRolls(v.shots, v.plusHit));
+            }
+            return rolls;
+        }
 	
 	public static ArrayList<DiceRoll> getRolls(Shot[] shots, int plusHit)
 	{
