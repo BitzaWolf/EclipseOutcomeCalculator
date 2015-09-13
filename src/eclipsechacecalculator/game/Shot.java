@@ -8,7 +8,8 @@ public enum Shot
 {
 	YELLOW(1, "Yel"),
 	ORANGE(2, "Ora"),
-	RED(4, "Red");
+	RED(4, "Red"),
+	MISS(0, "Mis");
 	
 	public final int damagePerHit;
 	private final String debugName;
@@ -23,5 +24,10 @@ public enum Shot
 	public String toString()
 	{
 		return debugName;
+	}
+	
+	public int compare(Shot other)
+	{
+		return (this.damagePerHit - other.damagePerHit);
 	}
 }
