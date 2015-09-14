@@ -27,6 +27,8 @@ public class ShipGroup
     public Volley getVolley()
     {
 	ArrayList<Shot> s = ships.get(0).getShots();
-	Volley retMe = new Volley(ships.size(), ships.get(0).getShots().toArray());
+	Shot[] shots = new Shot[ships.size()];
+	s.toArray(shots);
+	return new Volley(ships.size(), shots, ships.get(0).getCurrentAttributes().plusHit);
     }
 }

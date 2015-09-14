@@ -1,7 +1,6 @@
 package eclipsechacecalculator.combatlogic;
 
 import eclipsechacecalculator.game.Shot;
-import java.util.Comparator;
 
 /**
 **	
