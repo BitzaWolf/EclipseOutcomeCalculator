@@ -16,6 +16,11 @@ public class ShipGroup
 {
     private ArrayList<Ship> ships;
     
+	private ShipGroup()
+	{
+		ships = new ArrayList<>();
+	}
+	
     public ShipGroup(Ship templateShip, int numOfShips)
     {
 		ships = new ArrayList<>();
@@ -48,6 +53,16 @@ public class ShipGroup
 		}
 	}
 	
+	public ShipGroup copy()
+	{
+		ShipGroup retMe = new ShipGroup();
+		for (int i = 0; i < ships.size(); ++i)
+		{
+			retMe.ships.add(i, ships.get(i).copy());
+		}
+		return retMe;
+	}
+	
 	public boolean doesHit(Hit h)
 	{
 		if (isEmpty())
@@ -56,6 +71,28 @@ public class ShipGroup
 		}
 		int hitStrength = h.strength - ships.get(0).getCurrentAttributes().minusHit;
 		return (hitStrength >= 6);
+	}
+	
+	public boolean doesHitCauseKill(Hit h)
+	{
+		if (isEmpty())
+		{
+			return false;
+		}
+		return (ships.get(0).getHealthRemaining() <= h.shot.damagePerHit);
+	}
+	
+	public boolean equals(ShipGroup other)
+	{
+		if (ships.size() != other.ships.size())
+		{
+			return false;
+		}
+		if (! ships.get(0).equals(other.ships.get(0)))
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	public int getInitiative()
@@ -90,6 +127,17 @@ public class ShipGroup
 		{
 			ships.remove(ships.size() - 1);
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		if (ships.isEmpty())
+		{
+			return "SHIP GROUP: <empty>";
+		}
+		String retMe = "SHIP GROUP: " + ships.get(0) + " x" + ships.size() + " ships.";
+		return retMe;
 	}
 	
 	public int sortByInitiative(ShipGroup other)

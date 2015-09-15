@@ -23,6 +23,20 @@ public class Attributes
 		initiative = init;
 	}
 	
+	public Attributes add(Attributes other)
+	{
+		Attributes retMe = copy();
+		
+		retMe.hullPoints += other.hullPoints;
+		retMe.plusHit += other.plusHit;
+		retMe.minusHit += other.minusHit;
+		retMe.powerSupply += other.powerSupply;
+		retMe.powerConsumption += other.powerConsumption;
+		retMe.initiative += other.initiative;
+		
+		return retMe;
+	}
+	
 	public Attributes copy()
 	{
 		Attributes retMe = new Attributes();
@@ -36,18 +50,14 @@ public class Attributes
 		return retMe;
 	}
 	
-	public Attributes add(Attributes other)
+	public boolean equals(Attributes other)
 	{
-		Attributes retMe = copy();
-		
-		retMe.hullPoints += other.hullPoints;
-		retMe.plusHit += other.plusHit;
-		retMe.minusHit += other.minusHit;
-		retMe.powerSupply += other.powerSupply;
-		retMe.powerConsumption += other.powerConsumption;
-		retMe.initiative += other.initiative;
-		
-		return retMe;
+		return (hullPoints == other.hullPoints &&
+				initiative == other.initiative &&
+				minusHit == other.minusHit &&
+				plusHit == other.plusHit &&
+				powerConsumption == other.powerConsumption &&
+				powerSupply == other.powerSupply);
 	}
 	
 	public Attributes subtract(Attributes other)
@@ -67,8 +77,8 @@ public class Attributes
 	@Override
 	public String toString()
 	{
-		String retMe = "HP: " + hullPoints + " +H: " + plusHit + " -H: " + minusHit;
-		retMe += " PS: " + powerSupply + " PC: " + powerConsumption + " I:" + initiative;
+		String retMe = "HP:" + hullPoints + " +H:" + plusHit + " -H:" + minusHit;
+		retMe += " PS:" + powerSupply + " PC:" + powerConsumption + " I:" + initiative;
 		return retMe;
 	}
 }

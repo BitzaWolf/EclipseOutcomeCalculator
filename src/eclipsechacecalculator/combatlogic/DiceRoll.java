@@ -61,6 +61,11 @@ public class DiceRoll
 		this.probability += other.probability;
 	}
 	
+	public ArrayList<Hit> getHits()
+	{
+		return hits;
+	}
+	
 	public void sortHits()
 	{
 		for (int i = 1; i < hits.size(); ++i)

@@ -1,7 +1,8 @@
 package eclipsechacecalculator;
 
+import eclipsechacecalculator.combatlogic.*;
 import eclipsechacecalculator.game.*;
-import eclipsechacecalculator.game.ships.Interceptor;
+import eclipsechacecalculator.game.ships.*;
 import java.util.ArrayList;
 
 /**
@@ -12,9 +13,61 @@ public class UnitTests
 {
 	public static void runTests()
 	{
+		/*
 		testAttributes();
 		testShots();
 		testShip();
+		testShipGroups();
+		testRolls();
+		*/
+		testTeams();
+	}
+	
+	public static void testTeams()
+	{
+		Ship playerShip = new Interceptor();
+		Ship ancient = new Ancient();
+		
+		Team player = new Team("Player", false);
+		player.addShips(playerShip, 3);
+		
+		Team ancients = new Team("Ancients", true);
+		ancients.addShips(ancient, 1);
+		
+		int playersBestInit = player.getHighestInitiative();
+		int ancientsBestInit = ancients.getHighestInitiative();
+		boolean checkingDefenders = (ancientsBestInit >= playersBestInit);
+		int initiative = checkingDefenders ? ancientsBestInit : playersBestInit;
+		
+		ArrayList<ShipGroup> ships;
+		Team firingTeam = checkingDefenders ? ancients : player;
+		Team receivingTeam = checkingDefenders ? player : ancients;
+
+		ships = firingTeam.getShips(initiative);
+		while (receivingTeam.getShips(initiative).isEmpty())
+		{
+			--initiative;
+			if (initiative < 0)
+			{
+				initiative = 8;
+			}
+			ships.addAll(firingTeam.getShips(initiative));
+		}
+
+		ArrayList<Volley> vollies = new ArrayList<>();
+		for (ShipGroup sg : ships)
+		{
+			vollies.add(sg.getVolley());
+		}
+		ArrayList<DiceRoll> rolls = DiceRoll.getRolls(vollies);
+
+		for (DiceRoll roll : rolls)
+		{
+			Team resultingTeam = receivingTeam.copy();
+			System.out.println("Running roll : " + roll);
+			resultingTeam.disperseHits(roll.getHits());
+			System.out.println(resultingTeam + "\n");
+		}
 	}
 	
 	public static void testAttributes()
@@ -104,5 +157,38 @@ public class UnitTests
 			System.out.println(ships.get(i));
 		}
 		System.out.println("Test maybe successful. Read output and check.\n");
+	}
+	
+	public static void testShipGroups()
+	{
+		Ship ship = new Interceptor();
+		ship.addShipPart(ShipPart.GAUSS_SHIELD);
+		ShipGroup sg = new ShipGroup(ship, 2);
+		int init = sg.getInitiative();
+		
+		Hit h = new Hit(Shot.YELLOW, 6);
+		if (sg.doesHit(h))
+		{
+			sg.applyHit(h);
+		}
+	}
+	
+	public static void testRolls()
+	{
+		Ship ship = new Interceptor();
+		ship.addShipPart(ShipPart.ELECTRON_COMPUTER);
+		ShipGroup sg = new ShipGroup(ship, 2);
+		
+		ArrayList<Volley> vollies = new ArrayList<>();
+		vollies.add(sg.getVolley());
+		
+		ArrayList<DiceRoll> rolls = DiceRoll.getRolls(vollies);
+		float sumChance = 0;
+		for (DiceRoll roll : rolls)
+		{
+			System.out.println(roll);
+			sumChance += roll.getProbability();
+		}
+		System.out.println("Sum chance: " + (sumChance * 100) + "%");
 	}
 }

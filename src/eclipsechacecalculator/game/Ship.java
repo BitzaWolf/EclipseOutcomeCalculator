@@ -43,6 +43,16 @@ public class Ship
 		return retMe;
 	}
 	
+	public boolean equals(Ship other)
+	{
+		Attributes currentAttributes = getCurrentAttributes();
+		Attributes otherCurrentAttr = other.getCurrentAttributes();
+		return (baseAttributes.equals(other.baseAttributes) &&
+				currentAttributes.equals(otherCurrentAttr) &&
+				damage == other.damage &&
+				maxShipParts == other.maxShipParts);
+	}
+	
 	public Attributes getCurrentAttributes()
 	{
 		Attributes retMe = baseAttributes.copy();
@@ -51,6 +61,12 @@ public class Ship
 			retMe = retMe.add(shipParts.get(i).attributes);
 		}
 		return retMe;
+	}
+	
+	public int getHealthRemaining()
+	{
+		Attributes current = getCurrentAttributes();
+		return (current.hullPoints - damage);
 	}
 	
 	public ArrayList<Shot> getShots()
