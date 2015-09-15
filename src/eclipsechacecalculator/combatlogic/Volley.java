@@ -19,6 +19,10 @@ public class Volley
     {
         int totalShots = shotsPerShip.length * numOfShips;
         shots = new Shot[totalShots];
+		for (int i = 0; i < shots.length; ++i)
+		{
+			shots[i] = shotsPerShip[i % shotsPerShip.length];
+		}
         this.plusHit = plusHit;
     }
 }

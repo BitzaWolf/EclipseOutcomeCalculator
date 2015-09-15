@@ -18,17 +18,93 @@ public class ShipGroup
     
     public ShipGroup(Ship templateShip, int numOfShips)
     {
-	for (int i = 0; i < numOfShips; ++i)
-	{
-	    ships.add(templateShip.copy());
-	}
+		ships = new ArrayList<>();
+		
+		for (int i = 0; i < numOfShips; ++i)
+		{
+			ships.add(templateShip.copy());
+		}
     }
+	
+	public void addShip(int amount)
+	{
+		Ship temp = ships.get(0);
+		for (int i = 0; i < amount; ++i)
+		{
+			ships.add(temp.copy());
+		}
+	}
+	
+	public void applyHit(Hit h)
+	{
+		if (isEmpty())
+		{
+			return;
+		}
+		ships.get(0).takeDamage(h.shot.damagePerHit);
+		if (ships.get(0).isDead())
+		{
+			ships.remove(0);
+		}
+	}
+	
+	public boolean doesHit(Hit h)
+	{
+		if (isEmpty())
+		{
+			return false;
+		}
+		int hitStrength = h.strength - ships.get(0).getCurrentAttributes().minusHit;
+		return (hitStrength >= 6);
+	}
+	
+	public int getInitiative()
+	{
+		if (isEmpty())
+		{
+			return 0;
+		}
+		return ships.get(0).getCurrentAttributes().initiative;
+	}
     
     public Volley getVolley()
     {
-	ArrayList<Shot> s = ships.get(0).getShots();
-	Shot[] shots = new Shot[ships.size()];
-	s.toArray(shots);
-	return new Volley(ships.size(), shots, ships.get(0).getCurrentAttributes().plusHit);
+		if (isEmpty())
+		{
+			return null;
+		}
+		ArrayList<Shot> s = ships.get(0).getShots();
+		Shot[] shots = new Shot[s.size()];
+		s.toArray(shots);
+		return new Volley(ships.size(), shots, ships.get(0).getCurrentAttributes().plusHit);
     }
+	
+	public boolean isEmpty()
+	{
+		return ships.isEmpty();
+	}
+	
+	public void removeShip(int amount)
+	{
+		for (int i = 0; i < amount; ++i)
+		{
+			ships.remove(ships.size() - 1);
+		}
+	}
+	
+	public int sortByInitiative(ShipGroup other)
+	{
+		return (getInitiative() - other.getInitiative());
+	}
+	
+	public int sortByMaxParts(ShipGroup other)
+	{
+		if (isEmpty())
+		{
+			return 0;
+		}
+		int thisMaxParts = ships.get(0).getMaxShipParts();
+		int otherMaxParts = other.ships.get(0).getMaxShipParts();
+		return (thisMaxParts - otherMaxParts);
+	}
 }

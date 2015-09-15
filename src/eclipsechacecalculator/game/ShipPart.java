@@ -11,6 +11,7 @@ public enum ShipPart
 {
 	ELECTRON_COMPUTER(null, new Attributes(0, 1, 0, 0, 0, 0)),
 	HULL(null, new Attributes(1, 0, 0, 0, 0, 0)),
+	GAUSS_SHIELD(null, new Attributes(0, 0, 1, 0, 0, 0)),
 	ION_CANNON(null, new Attributes(0, 0, 0, 0, 1, 0), Shot.YELLOW),
 	NUCLEAR_DRIVE(null, new Attributes(0, 0, 0, 0, 1, 1)),
 	NUCLEAR_SOURCE(null, new Attributes(0, 0, 0, 3, 0, 0));

@@ -36,7 +36,7 @@ public class DiceRoll
 	
 	public boolean equals(DiceRoll other)
 	{
-		if (hits.size() != other.hits.size() || probability != other.probability)
+		if (hits.size() != other.hits.size())
 		{
 			return false;
 		}
@@ -76,15 +76,70 @@ public class DiceRoll
 		}
 	}
         
-        public static ArrayList<DiceRoll> getRolls(ArrayList<Volley> vollies)
-        {
-            ArrayList rolls = new ArrayList<>();
-            for (Volley v : vollies)
-            {
-                rolls.addAll(getRolls(v.shots, v.plusHit));
-            }
-            return rolls;
-        }
+    public static ArrayList<DiceRoll> getRolls(ArrayList<Volley> vollies)
+    {
+		ArrayList<DiceRoll> rolls = new ArrayList<>();
+		recurseRolls(vollies, 0, 0, 1.0f, new DiceRoll(), rolls);
+		
+		for (int i = 1; i < rolls.size(); ++i)
+		{
+			DiceRoll roll = rolls.get(i);
+			for (int k = i + 1; k < rolls.size(); ++k)
+			{
+				DiceRoll otherRoll = rolls.get(k);
+				if (roll.equals(otherRoll))
+				{
+					roll.combine(otherRoll);
+					rolls.remove(k);
+					--k;
+				}
+			}
+		}
+		
+		return rolls;
+	}
+	
+	private static void recurseRolls(ArrayList<Volley> vollies, int volIndex, int shotIndex, float probability, DiceRoll roll, ArrayList<DiceRoll> rolls)
+	{
+		if (volIndex >= vollies.size())
+		{
+			DiceRoll storeMe = roll.copy();
+			
+			storeMe.probability = probability;
+			storeMe.sortHits();
+			rolls.add(storeMe);
+			return;
+		}
+		else if (shotIndex >= vollies.get(volIndex).shots.length)
+		{
+			recurseRolls(vollies, volIndex + 1, 0, probability, roll, rolls);
+			return;
+		}
+		
+		Volley vol = vollies.get(volIndex);
+		int lowestHit = 6 - vol.plusHit;
+		if (lowestHit < 2)
+		{
+			lowestHit = 2;
+		}
+		float missChance = (lowestHit - 1) / 6.0f;
+		roll.hits.add(new Hit(Shot.MISS, 0));
+		recurseRolls(vollies, volIndex, shotIndex + 1, missChance * probability, roll, rolls);
+		roll.hits.remove(roll.hits.size() - 1);
+		
+		Shot shot = vol.shots[shotIndex];
+		for (int i = lowestHit; i <= 6; ++i)
+		{
+			int strength = i + vol.plusHit;
+			if (i == 6)
+			{
+				strength = 99;
+			}
+			roll.hits.add(new Hit(shot, strength));
+			recurseRolls(vollies, volIndex, shotIndex + 1, probability * (1 / 6.0f), roll, rolls);
+			roll.hits.remove(roll.hits.size() - 1);
+		}
+	}
 	
 	public static ArrayList<DiceRoll> getRolls(Shot[] shots, int plusHit)
 	{

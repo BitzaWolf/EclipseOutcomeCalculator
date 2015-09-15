@@ -12,6 +12,7 @@ public class Ship
 	protected ArrayList<ShipPart> shipParts;
 	protected int maxShipParts;
 	protected String name;
+	private int damage;
 	
 	public Ship()
 	{
@@ -24,6 +25,7 @@ public class Ship
 		shipParts = new ArrayList<>();
 		this.maxShipParts = maxShipParts;
 		this.name = name;
+		damage = 0;
 	}
 	
 	public Ship copy()
@@ -62,6 +64,11 @@ public class Ship
 		return shots;
 	}
 	
+	public int getMaxShipParts()
+	{
+		return maxShipParts;
+	}
+	
 	public void addShipPart(ShipPart part)
 	{
 		shipParts.add(part);
@@ -85,7 +92,7 @@ public class Ship
 			throw (new IllegalArgumentException("Damage taken is negative: " + amount));
 		}
 		
-		baseAttributes.hullPoints -= amount;
+		damage += amount;
 	}
 	
 	public boolean isOverloadedShipParts()
@@ -101,13 +108,20 @@ public class Ship
 	
 	public boolean isDead()
 	{
-		return (getCurrentAttributes().hullPoints <= 0);
+		return (getCurrentAttributes().hullPoints <= damage);
 	}
 	
 	@Override
 	public String toString()
 	{
-		String retMe = "SHIP : " + name + " STATS: " + getCurrentAttributes() + " SHOTS: ";
+		String retMe = "SHIP : " + name + " STATS: " + getCurrentAttributes();
+		if (damage != 0)
+		{
+			Attributes att = getCurrentAttributes();
+			int hpRemaining = att.hullPoints - damage;
+			retMe += "(" + hpRemaining + "/" + att.hullPoints + " HP)";
+		}
+		retMe += " SHOTS: ";
 		ArrayList<Shot> shots = getShots();
 		if (shots.isEmpty())
 		{

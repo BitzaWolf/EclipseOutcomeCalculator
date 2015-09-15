@@ -1,7 +1,8 @@
 package eclipsechacecalculator;
 
-import eclipsechacecalculator.combatlogic.DiceRoll;
-import eclipsechacecalculator.game.Shot;
+import eclipsechacecalculator.combatlogic.*;
+import eclipsechacecalculator.game.*;
+import eclipsechacecalculator.game.ships.Interceptor;
 import java.util.ArrayList;
 
 /**
@@ -17,10 +18,30 @@ public class Main
 	{
 		//UnitTests.runTests();
 		
-		Shot[] shots = new Shot[2];
-		shots[0] = Shot.YELLOW;
-		shots[1] = Shot.YELLOW;
-		ArrayList<DiceRoll> rolls = DiceRoll.getRolls(shots, 1);
+		Ship ship = new Interceptor();
+		ship.addShipPart(ShipPart.GAUSS_SHIELD);
+		ShipGroup sg = new ShipGroup(ship, 2);
+		int init = sg.getInitiative();
+		
+		Hit h = new Hit(Shot.YELLOW, 6);
+		if (sg.doesHit(h))
+		{
+			sg.applyHit(h);
+		}
+		
+		testRolls();
+	}
+	
+	public static void testRolls()
+	{
+		Ship ship = new Interceptor();
+		ship.addShipPart(ShipPart.ELECTRON_COMPUTER);
+		ShipGroup sg = new ShipGroup(ship, 2);
+		
+		ArrayList<Volley> vollies = new ArrayList<>();
+		vollies.add(sg.getVolley());
+		
+		ArrayList<DiceRoll> rolls = DiceRoll.getRolls(vollies);
 		float sumChance = 0;
 		for (DiceRoll roll : rolls)
 		{
