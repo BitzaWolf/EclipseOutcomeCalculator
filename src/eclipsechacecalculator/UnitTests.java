@@ -13,13 +13,11 @@ public class UnitTests
 {
 	public static void runTests()
 	{
-		/*
 		testAttributes();
 		testShots();
 		testShip();
 		testShipGroups();
 		testRolls();
-		*/
 		testTeams();
 	}
 	
