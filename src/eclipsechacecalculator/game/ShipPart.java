@@ -14,7 +14,8 @@ public enum ShipPart
 	GAUSS_SHIELD(null, new Attributes(0, 0, 1, 0, 0, 0)),
 	ION_CANNON(null, new Attributes(0, 0, 0, 0, 1, 0), Shot.YELLOW),
 	NUCLEAR_DRIVE(null, new Attributes(0, 0, 0, 0, 1, 1)),
-	NUCLEAR_SOURCE(null, new Attributes(0, 0, 0, 3, 0, 0));
+	NUCLEAR_SOURCE(null, new Attributes(0, 0, 0, 3, 0, 0)),
+	PLASMA_CANNON(null, new Attributes(0, 0, 0, 0, 2, 0), Shot.ORANGE);
 	
 	public final Attributes attributes;
 	public final ImageIcon icon;

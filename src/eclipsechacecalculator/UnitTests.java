@@ -19,6 +19,35 @@ public class UnitTests
 		testShipGroups();
 		testRolls();
 		testTeams();
+		testScenarios();
+	}
+	
+	public static void testScenarios()
+	{
+		Ship playerShip = new Interceptor();
+		playerShip.addShipPart(ShipPart.PLASMA_CANNON);
+		Ship ancient = new Ancient();
+		
+		Team playerTeam = new Team("Player", false);
+		playerTeam.addShips(playerShip, 2);
+		
+		Team neutralTeam = new Team("Neutrals", true);
+		neutralTeam.addShips(ancient, 1);
+		
+		int playersBestInit = playerTeam.getHighestInitiative();
+		int ancientsBestInit = neutralTeam.getHighestInitiative();
+		boolean defendersTurn = (ancientsBestInit >= playersBestInit);
+		int initiative = defendersTurn ? ancientsBestInit : playersBestInit;
+		
+		Scenario baseScenario = new Scenario(1.0f, neutralTeam, playerTeam, initiative,
+				defendersTurn);
+		
+		baseScenario.run();
+		System.out.println(baseScenario);
+		for (Scenario s : baseScenario.getNextScenarios())
+		{
+			System.out.println(s);
+		}
 	}
 	
 	public static void testTeams()

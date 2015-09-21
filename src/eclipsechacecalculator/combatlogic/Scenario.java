@@ -25,8 +25,36 @@ public class Scenario
 		startingInitiative = initiative;
 		this.defendersTurn = defendersTurn;
 		
-		alreadyRan = false;
 		resultingScenarios = new ArrayList<>();
+		alreadyRan = false;
+		
+		if (defensiveTeam.isDefeated() || offensiveTeam.isDefeated())
+		{
+			alreadyRan = true;
+		}
+	}
+	
+	public boolean equals(Scenario other)
+	{
+		return (defendersTurn == other.defendersTurn &&
+			defensiveTeam.equals(other.defensiveTeam) &&
+			offensiveTeam.equals(other.offensiveTeam) &&
+			startingInitiative == other.startingInitiative);
+	}
+	
+	public ArrayList<Scenario> getNextScenarios()
+	{
+		return resultingScenarios;
+	}
+	
+	public float getProbability()
+	{
+		return probability;
+	}
+	
+	public boolean isOutcome()
+	{
+		return (defensiveTeam.isDefeated() || offensiveTeam.isDefeated());
 	}
 	
 	public void run()
@@ -47,17 +75,17 @@ public class Scenario
 		{
 			while (receivingTeam.getShips(initiative).isEmpty())
 			{
-				reduceInitiative(initiative);
+				initiative = reduceInitiative(initiative);
 				ships.addAll(firingTeam.getShips(initiative));
 			}
 		}
 		else
 		{
-			reduceInitiative(initiative);
+			initiative = reduceInitiative(initiative);
 			while (receivingTeam.getShips(initiative).isEmpty())
 			{
 				ships.addAll(firingTeam.getShips(initiative));
-				reduceInitiative(initiative);
+				initiative = reduceInitiative(initiative);
 			}
 		}
 		
@@ -88,17 +116,7 @@ public class Scenario
 			resultingScenarios.add(addMe);
 		}
 		
-		for (int i = 1; i < resultingScenarios.size(); ++i)
-		{
-			Scenario a = resultingScenarios.get(i - 1);
-			Scenario b = resultingScenarios.get(i);
-			if (a.equals(b))
-			{
-				a.probability += b.probability;
-				resultingScenarios.remove(i);
-				--i;
-			}
-		}
+		combineScenarios(resultingScenarios);
 	}
 	
 	private int reduceInitiative(int initiative)
@@ -111,11 +129,36 @@ public class Scenario
 		return initiative;
 	}
 	
-	public boolean equals(Scenario other)
+	@Override
+	public String toString()
 	{
-		return (defendersTurn == other.defendersTurn &&
-			defensiveTeam.equals(other.defensiveTeam) &&
-			offensiveTeam.equals(other.offensiveTeam) &&
-			startingInitiative == other.startingInitiative);
+		String retMe = "SCENARIO\n";
+		retMe += "----------------\n";
+		retMe += "prb: " + (probability * 100) + "% ran: " + alreadyRan;
+		retMe += " defTurn: " + defendersTurn + " startInit: " + startingInitiative + "\n";
+		retMe += "----------------\n";
+		retMe += "Defensive Team\n" + defensiveTeam + "\n";
+		retMe += "Offensive Team\n" + offensiveTeam + "\n";
+		retMe += resultingScenarios.size() + "possible scenarios/outcomes.\n";
+		retMe += "----------------\nEND SCENARIO\n\n";
+		return retMe;
+	}
+	
+	public static void combineScenarios(ArrayList<Scenario> scenarios)
+	{
+		for (int i = 0; i < scenarios.size() - 1; ++i)
+		{
+			Scenario a = scenarios.get(i);
+			for (int j = i + 1; j < scenarios.size(); ++j)
+			{
+				Scenario b = scenarios.get(j);
+				if (a.equals(b))
+				{
+					a.probability += b.probability;
+					scenarios.remove(j);
+					--j;
+				}
+			}
+		}
 	}
 }
