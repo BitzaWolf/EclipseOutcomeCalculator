@@ -138,6 +138,14 @@ public class Team
 		return groups;
 	}
 	
+	public void healShips()
+	{
+		for (ShipGroup sg : shipGroups)
+		{
+			sg.healShips();
+		}
+	}
+	
 	public boolean isDefending()
 	{
 		return defending;

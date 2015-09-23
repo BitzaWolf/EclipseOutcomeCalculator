@@ -31,6 +31,14 @@ public class Scenario
 		if (defensiveTeam.isDefeated() || offensiveTeam.isDefeated())
 		{
 			alreadyRan = true;
+			if (defensiveTeam.isDefeated())
+			{
+				offensiveTeam.healShips();
+			}
+			else
+			{
+				defensiveTeam.healShips();
+			}
 		}
 	}
 	

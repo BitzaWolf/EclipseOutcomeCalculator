@@ -85,6 +85,11 @@ public class Ship
 		return maxShipParts;
 	}
 	
+	public void heal()
+	{
+		damage = 0;
+	}
+	
 	public void addShipPart(ShipPart part)
 	{
 		shipParts.add(part);

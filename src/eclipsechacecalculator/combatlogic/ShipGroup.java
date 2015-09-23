@@ -116,6 +116,15 @@ public class ShipGroup
 		return new Volley(ships.size(), shots, ships.get(0).getCurrentAttributes().plusHit);
     }
 	
+	public void healShips()
+	{
+		if (isEmpty())
+		{
+			return;
+		}
+		ships.get(0).heal();
+	}
+	
 	public boolean isEmpty()
 	{
 		return ships.isEmpty();
