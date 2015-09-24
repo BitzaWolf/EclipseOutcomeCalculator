@@ -4,6 +4,7 @@ import eclipsechacecalculator.combatlogic.*;
 import eclipsechacecalculator.game.*;
 import eclipsechacecalculator.game.ships.*;
 import eclipsechacecalculator.gui.*;
+import eclipsechacecalculator.gui.ships.InterceptorPanel;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.*;
@@ -22,10 +23,7 @@ public class Main
 		JFrame frame = new JFrame("Eclipse Battle Simulator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 300);
-		
-		JPanel panel = new JPanel();
-		panel.add(new ShipPartContainer());
-		frame.add(panel);
+		frame.add(new InterceptorPanel());
 		
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);

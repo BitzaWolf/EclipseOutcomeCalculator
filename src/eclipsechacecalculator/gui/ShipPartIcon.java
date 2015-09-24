@@ -1,84 +1,69 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package eclipsechacecalculator.gui;
 
-import java.awt.*;
+import eclipsechacecalculator.game.ShipPart;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
-**	
-**	@author Bitza Wolf
-**/
-public class ShipPartIcon extends JLabel implements ListCellRenderer
+ *
+ * @author Wolf
+ */
+public enum ShipPartIcon
 {
-	private static ImageIcon[] IMAGES;
-	private static boolean initialized = false;
+	BLANK("Blank.png", null),
+	ELECTRON_COMPUTER("ElectronComputer.png", ShipPart.ELECTRON_COMPUTER),
+	POSITRON_COMPUTER("PositronComputer.png", ShipPart.POSITRON_COMPUTER),
+	GLUON_COMPUTER("GluonComputer.png", ShipPart.GLUON_COMPUTER),
+	HULL("Hull.png", ShipPart.HULL),
+	IMPROVED_HULL("ImprovedHull.png", ShipPart.IMPROVED_HULL),
+	GAUSS_SHIELD("GaussShield.png", ShipPart.GAUSS_SHIELD),
+	PHASE_SHIELD("PhaseShield.png", ShipPart.PHASE_SHIELD),
+	ION_CANNON("IonCannon.png", ShipPart.ION_CANNON),
+	PLASMA_CANNON("PlasmaCannon.png", ShipPart.PLASMA_CANNON),
+	ANTIMATTER_CANNON("AntimatterCannon.png", ShipPart.ANTIMATTER_CANNON),
+	PLASMA_MISSILE("PlasmaMissile.png", null),
+	NUCLEAR_DRIVE("NuclearDrive.png", ShipPart.NUCLEAR_DRIVE),
+	FUSION_DRIVE("FusionDrive.png", ShipPart.FUSION_DRIVE),
+	TACHYON_DRIVE("TachyonDrive.png", ShipPart.TACHYON_DRIVE),
+	NUCLEAR_SOURCE("NuclearSource.png", ShipPart.NUCLEAR_SOURCE),
+	FUSION_SOURCE("FusionSource.png", ShipPart.FUSION_SOURCE),
+	TACHYON_SOURCE("TachyonSource.png", ShipPart.TACHYON_SOURCE);
 	
-	private void initialize()
+	private ImageIcon icon;
+	public final ShipPart shipPart;
+	
+	private ShipPartIcon(String fileName, ShipPart part)
 	{
-		initialized = true;
-		String[] iconNames = {
-			"AntimatterCannon.png",
-			"Blank.png",
-			"ElectronComputer.png",
-			"FusionDrive.png",
-			"FusionSource.png",
-			"GaussShield.png",
-			"GluonComputer.png",
-			"Hull.png",
-			"ImprovedHull.png",
-			"IonCannon.png",
-			"NuclearDrive.png",
-			"NuclearSource.png",
-			"PhaseShield.png",
-			"PlasmaCannon.png",
-			"PlasmaMissile.png",
-			"PositronComputer.png",
-			"TachyonDrive.png",
-			"TachyonSource.png"
-		};
+		shipPart = part;
 		
-		IMAGES = new ImageIcon[iconNames.length];
-		for (int i = 0; i < IMAGES.length; ++i)
+		String imagePath = "res/upgrades/" + fileName;
+		BufferedImage buff;
+		try
 		{
-			String imagePath = "res/upgrades/" + iconNames[i];
-			BufferedImage buff;
-			try
-			{
-				buff = ImageIO.read(new File(imagePath));
-				BufferedImage smaller = new BufferedImage(72, 72, BufferedImage.TYPE_INT_ARGB);
-				AffineTransform at = new AffineTransform();
-				at.scale(0.25, 0.25);
-				AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-				smaller = scaleOp.filter(buff, smaller);
-				IMAGES[i] = new ImageIcon(smaller);
-			}
-			catch (IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
+			buff = ImageIO.read(new File(imagePath));
+			BufferedImage smaller = new BufferedImage(58, 58, BufferedImage.TYPE_INT_ARGB);
+			AffineTransform at = new AffineTransform();
+			at.scale(0.2, 0.2);
+			AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+			smaller = scaleOp.filter(buff, smaller);
+			icon = new ImageIcon(smaller);
+		}
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
 		}
 	}
 	
-	public ShipPartIcon()
+	public ImageIcon getIcon()
 	{
-		if (! initialized)
-		{
-			initialize();
-		}
-		setPreferredSize(new Dimension(72, 72));
-		setOpaque(true);
-		setHorizontalAlignment(CENTER);
-		setVerticalAlignment(CENTER);
-	}
-	
-	@Override
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-	{
-		setIcon(IMAGES[0]);
-		return this;
+		return icon;
 	}
 }
