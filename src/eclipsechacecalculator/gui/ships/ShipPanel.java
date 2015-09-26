@@ -23,17 +23,23 @@ public abstract class ShipPanel extends JPanel
 	public ShipPanel()
 	{
 		super(new GridBagLayout());
+		super.setOpaque(false);
 		
-		countPanel = new ShipCountPanel();
 		GridBagConstraints gbc = new GridBagConstraints();
+		countPanel = new ShipCountPanel();
 		gbc.gridwidth = 3;
-		gbc.gridy = 4;
+		gbc.gridy = 99;
 		super.add(countPanel, gbc);
 		
 		partContainers = new ArrayList<>();
 	}
 	
 	public abstract Ship getShip();
+	
+	public int getCount()
+	{
+		return countPanel.getCount();
+	}
 	
 	public ArrayList<ShipPart> getShipParts()
 	{

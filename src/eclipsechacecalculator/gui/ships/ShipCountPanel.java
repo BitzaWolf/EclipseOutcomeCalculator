@@ -40,6 +40,8 @@ public class ShipCountPanel extends JPanel implements ActionListener
 	
 	public ShipCountPanel()
 	{
+		super.setOpaque(false);
+		
 		minusButt = new JButton(minusIcon);
 		minusButt.addActionListener(this);
 		super.add(minusButt);

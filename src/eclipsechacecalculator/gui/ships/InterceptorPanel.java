@@ -5,12 +5,10 @@
  */
 package eclipsechacecalculator.gui.ships;
 
-import eclipsechacecalculator.game.Ship;
-import eclipsechacecalculator.game.ShipPart;
-import eclipsechacecalculator.game.ships.Interceptor;
+import eclipsechacecalculator.game.*;
+import eclipsechacecalculator.game.ships.*;
 import eclipsechacecalculator.gui.*;
 import java.awt.*;
-import javax.swing.*;
 
 /**
  *

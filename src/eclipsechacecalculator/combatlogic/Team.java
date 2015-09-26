@@ -10,24 +10,26 @@ import java.util.ArrayList;
 public class Team
 {
 	private String name;
-	private boolean defending;
 	private ArrayList<ShipGroup> shipGroups;
 	
 	public Team()
 	{
-		this("Unknown Team", false);
+		this("Unknown Team");
 	}
 	
-	public Team(String name, boolean isDefending)
+	public Team(String name)
 	{
 		
 		this.name = name;
-		defending = isDefending;
 		shipGroups = new ArrayList<>();
 	}
 	
 	public void addShips(Ship template, int count)
 	{
+		if (count == 0)
+		{
+			return;
+		}
 		shipGroups.add(new ShipGroup(template, count));
 		sortShipsBySize();
 	}
@@ -46,7 +48,7 @@ public class Team
 	
 	public Team copy()
 	{
-		Team retMe = new Team(name, defending);
+		Team retMe = new Team(name);
 		for (ShipGroup sg : shipGroups)
 		{
 			retMe.shipGroups.add(sg.copy());
@@ -144,11 +146,6 @@ public class Team
 		{
 			sg.healShips();
 		}
-	}
-	
-	public boolean isDefending()
-	{
-		return defending;
 	}
 	
 	public boolean isDefeated()

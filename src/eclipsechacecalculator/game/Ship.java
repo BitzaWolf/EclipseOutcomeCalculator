@@ -92,6 +92,10 @@ public class Ship
 	
 	public void addShipPart(ShipPart part)
 	{
+		if (part == null)
+		{
+			return;
+		}
 		shipParts.add(part);
 	}
 	

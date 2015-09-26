@@ -28,10 +28,10 @@ public class UnitTests
 		playerShip.addShipPart(ShipPart.PLASMA_CANNON);
 		Ship ancient = new Ancient();
 		
-		Team playerTeam = new Team("Player", false);
+		Team playerTeam = new Team("Player");
 		playerTeam.addShips(playerShip, 2);
 		
-		Team neutralTeam = new Team("Neutrals", true);
+		Team neutralTeam = new Team("Neutrals");
 		neutralTeam.addShips(ancient, 1);
 		
 		int playersBestInit = playerTeam.getHighestInitiative();
@@ -55,10 +55,10 @@ public class UnitTests
 		Ship playerShip = new Interceptor();
 		Ship ancient = new Ancient();
 		
-		Team player = new Team("Player", false);
+		Team player = new Team("Player");
 		player.addShips(playerShip, 3);
 		
-		Team ancients = new Team("Ancients", true);
+		Team ancients = new Team("Ancients");
 		ancients.addShips(ancient, 1);
 		
 		int playersBestInit = player.getHighestInitiative();
