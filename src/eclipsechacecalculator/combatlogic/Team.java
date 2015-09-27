@@ -19,7 +19,6 @@ public class Team
 	
 	public Team(String name)
 	{
-		
 		this.name = name;
 		shipGroups = new ArrayList<>();
 	}
@@ -151,6 +150,11 @@ public class Team
 	public boolean isDefeated()
 	{
 		return shipGroups.isEmpty();
+	}
+	
+	public boolean lightlyEquals(Team other)
+	{
+		return (name.equals(other.name));
 	}
 	
 	public void sortShipsBySize()

@@ -60,6 +60,19 @@ public class Scenario
 		return probability;
 	}
 	
+	public Team getWinningTeam()
+	{
+		if (! isOutcome())
+		{
+			return null;
+		}
+		if (defensiveTeam.isDefeated())
+		{
+			return offensiveTeam;
+		}
+		return defensiveTeam;
+	}
+	
 	public boolean isOutcome()
 	{
 		return (defensiveTeam.isDefeated() || offensiveTeam.isDefeated());
