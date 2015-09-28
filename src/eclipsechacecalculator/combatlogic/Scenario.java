@@ -6,7 +6,7 @@ import java.util.*;
  * 
  * @author Wolf
  */
-public class Scenario
+public class Scenario implements Runnable
 {
 	private static final int MAX_INITIATIVE = 8;
 	

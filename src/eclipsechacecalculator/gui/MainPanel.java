@@ -34,6 +34,7 @@ public class MainPanel extends JPanel implements ActionListener
 		butt.addActionListener(this);
 		outcomeBar = new JProgressBar(0, 100);
 		outcomeBar.setStringPainted(true);
+		outcomeBar.setPreferredSize(new Dimension(300, 40));
 		skippedLabel = new JLabel("0%");
 		
 		JPanel teamPanels = new JPanel(new GridLayout(2, 1));
@@ -41,17 +42,43 @@ public class MainPanel extends JPanel implements ActionListener
 		teamPanels.add(new JScrollPane(botPanel));
 		super.add(teamPanels, BorderLayout.CENTER);
 		
-		JPanel panel = new JPanel();
-		panel.add(outcomeBar);
-		panel.add(butt);
-		panel.add(skippedLabel);
+		JPanel resultsPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		
-		super.add(panel, BorderLayout.SOUTH);
+		gbc.gridwidth = 2;
+		gbc.insets.bottom = 10;
+		resultsPanel.add(butt, gbc);
+		
+		gbc.gridwidth = 1;
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.EAST;
+		resultsPanel.add(new JLabel("Odds of Winning"), gbc);
+		
+		gbc.gridx = 1;
+		gbc.anchor = GridBagConstraints.WEST;
+		resultsPanel.add(outcomeBar, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.anchor = GridBagConstraints.EAST;
+		resultsPanel.add(new JLabel("Scenarios Skipped"), gbc);
+		
+		gbc.gridx = 1;
+		gbc.anchor = GridBagConstraints.WEST;
+		resultsPanel.add(skippedLabel, gbc);
+		
+		super.add(resultsPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		HeadScenarioRunner headScenario = new HeadScenarioRunner(botPanel.getTeam(), topPanel.getTeam());
+		headScenario.run();
+		
 		butt.setEnabled(false);
 		Scenario baseScenario = buildBaseScenario();
 		ArrayList<Scenario> possibleOutcomes = runScenarios(baseScenario);
@@ -151,9 +178,9 @@ public class MainPanel extends JPanel implements ActionListener
 			}
 		}
 		
-		System.out.println("D: " + defendersWinPercent + "  A: " + attackersWinPercent);
+		float totalPercentage = defendersWinPercent + attackersWinPercent;
+		attackersWinPercent = (attackersWinPercent / totalPercentage) * 100;
 		
-		attackersWinPercent *= 100;
 		int attackersWinAsInt = (int) attackersWinPercent;
 		outcomeBar.setValue(attackersWinAsInt);
 		skippedLabel.setText((skippedScenarios * 100) + "%");
